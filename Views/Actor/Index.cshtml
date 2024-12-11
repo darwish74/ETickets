@@ -1,0 +1,14 @@
+﻿@model Actor
+@{
+    ViewData["Title"] = "Index";
+}
+<h1>Actor</h1>
+<div class="profile-card">
+    <div class="profile-header">
+        <img src="~/Images/cast/@Model.profilePicture" alt="Profile Picture">
+        <h3>@Model.FirstName @Model.LastName</h3>
+    </div>
+    <p class="bio">Bio:@Model.Bio</p>
+    <a href="#">Social media</a>
+</div>
+

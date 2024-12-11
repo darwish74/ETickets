@@ -1,0 +1,26 @@
+﻿@model ICollection<Movie>
+<div class="container mt-5">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="~/Images/movies/@item.Image" alt="@item.Name" class="card-img-top movie-img">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p class="card-text"><strong>Price:</strong> @item.Price</p>
+                        <p class="card-text"><strong>Cinema:</strong> @item.cinema.Name</p>
+                        <p class="card-text"><strong>Start Date:</strong> @item.StartDate</p>
+                        <p class="card-text"><strong>End Date:</strong> @item.EndDate</p>
+                        <p class="card-text"><strong>Category:</strong> @item.category.Name</p>
+                        <span class="badge bg-primary">@((MovieStatus)item.MovieStatus)</span>
+                        <div class="d-flex justify-content-between mt-3">
+                            <a href="/Home/Details/@item.Id" class="btn btn-outline-primary">More Details</a>
+                            <button class="btn btn-success">Book Ticket</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

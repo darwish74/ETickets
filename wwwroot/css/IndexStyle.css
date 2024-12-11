@@ -1,0 +1,53 @@
+﻿.movie-card {
+    max-width: 600px;
+    margin: 20px auto;
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.movie-img {
+    flex: 1 1 40%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.movie-content {
+    flex: 1 1 60%;
+    padding: 15px;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.card-text strong {
+    font-weight: bold;
+}
+
+.badge {
+    font-size: 0.9rem;
+}
+
+.btn {
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .movie-card {
+        flex-direction: column;
+    }
+
+    .movie-img {
+        width: 100%;
+    }
+
+    .movie-content {
+        width: 100%;
+    }
+}
