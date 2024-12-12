@@ -1,0 +1,25 @@
+﻿@model ICollection<Category>
+@{
+    ViewData["Title"] = "AllCategories";
+}
+
+<h1>All Categories</h1>
+
+<table class="table table-success table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Category Name</th>
+            <th scope="col">All Movies</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <th scope="row">@item.Name</th>
+            <td><a href="/Category/Index/@item.Id">All Movies</a></td>
+        </tr>
+        }
+    </tbody>
+</table>

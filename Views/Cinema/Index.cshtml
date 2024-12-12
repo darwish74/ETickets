@@ -1,22 +1,26 @@
-﻿@model ICollection<Movie>
-<div class="container mt-5">
+﻿@model ICollection<Cinema>
+@{
+    ViewData["Title"] = "Index";
+}
+<h1>@Model.Name</h1>
+<div class="container my-4">
     <div class="row">
         @foreach (var item in Model)
         {
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <img src="~/Images/movies/@item.Image" alt="@item.Name" class="card-img-top movie-img">
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm" style="width:10%, height:20%">
+                    <h5 class="card-title">@item.Name</h5>
+                    <img src="~/Images/movies/@item.Image" class="card-img-top" alt="Venom Poster">
                     <div class="card-body">
-                        <h5 class="card-title">@item.Name</h5>
                         <p class="card-text"><strong>Price:</strong> @item.Price</p>
                         <p class="card-text"><strong>Cinema:</strong> @item.cinema.Name</p>
                         <p class="card-text"><strong>Start Date:</strong> @item.StartDate</p>
                         <p class="card-text"><strong>End Date:</strong> @item.EndDate</p>
-                        <p class="card-text"><strong>Category:</strong>  <a href="/Category/Index/@item.CategoryId"> @item.category.Name</a></p>
+                        <p class="card-text"><strong>Category:</strong> @item.category.Name</p>
                         <span class="badge bg-primary">@((MovieStatus)item.MovieStatus)</span>
-                        <div class="d-flex justify-content-between mt-3">
+                        <div class="mt-3 d-flex justify-content-between">
                             <a href="/Home/Details/@item.Id" class="btn btn-outline-primary">More Details</a>
-                            <button class="btn btn-success">Book Ticket</button>
+                            <a href="#" class="btn btn-success">Book Ticket</a>
                         </div>
                     </div>
                 </div>
@@ -24,3 +28,5 @@
         }
     </div>
 </div>
+
+

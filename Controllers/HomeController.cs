@@ -31,8 +31,18 @@ namespace ETickets.Controllers
                         .FirstOrDefault(a=>a.Id==id);
             return View(movie);
         }
-      
-
+        public IActionResult Search(string name)
+        {
+            if(string.IsNullOrEmpty(name))
+            {
+                return View();
+            }
+            var movies = _context.Movies
+                        .Include(e=>e.category)
+                        .Include(e => e.cinema)
+                        .Where(a=>a.Name.ToLower().Contains(name.ToLower())).ToList();
+            return View("Index", movies);
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

@@ -15,6 +15,7 @@
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
 	</ItemGroup>
   <ItemGroup>
+    <Folder Include="Reopsitory\" />
     <Folder Include="wwwroot\Images\Logo\" />
   </ItemGroup>
 </Project>
