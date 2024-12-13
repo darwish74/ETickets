@@ -1,15 +1,20 @@
 ﻿using ETickets.Data;
+using ETickets.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ETickets.Controllers
 {
     public class ActorController : Controller
     {
-        //private readonly ApplicationDbContext _Context=new ApplicationDbContext();  
-        //public IActionResult Index(int id)
-        //{
-        //    var actor= _Context.Actors.Find(id);
-        //    return View(actor);
-        //}
+        private readonly IActor _actor;
+        public ActorController(IActor _actor)
+        {
+            this._actor = _actor;
+        }
+        public IActionResult Index(int id)
+        {
+            var actor = _actor.GetOne(e=>e.Id==id);
+            return View(actor);
+        }
     }
 }
