@@ -1,4 +1,5 @@
 ﻿using ETickets.Data;
+using ETickets.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,16 +7,21 @@ namespace ETickets.Controllers
 {
     public class CinemaController : Controller
     {
-        private readonly ApplicationDbContext _Context = new ApplicationDbContext();
+        private readonly ICinema _cinemaRepository;
+
+        public CinemaController(ICinema cinemaRepository)
+        {
+            _cinemaRepository = cinemaRepository;
+        }
         public IActionResult Index(int id)
         {
-            var Cinema = _Context.Cinemas.Include(e => e.Movies).ThenInclude(e => e.category).FirstOrDefault(e => e.Id == id);
+            var Cinema = _cinemaRepository.Get(includeprops:e=>e.Include(e=>e.Movies)).ToList();
             return View(Cinema);
         }
-        public IActionResult AllCategories()
+        public IActionResult CinemaMovies(int id)
         {
-            var Cinemas = _Context.Cinemas.ToList();
-            return View(Cinemas);
+            var Movies = _cinemaRepository.Get(filter:e=>e.Id==id,includeprops:e => e.Include(e => e.Movies)).ToList();
+            return View(Movies); 
         }
 
     }

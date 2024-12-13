@@ -1,3 +1,8 @@
+using ETickets.Data;
+using ETickets.Repository;
+using ETickets.Repository.IRepository;
+using Microsoft.EntityFrameworkCore;
+
 namespace ETickets
 {
     public class Program
@@ -8,7 +13,12 @@ namespace ETickets
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
+            builder.Services.AddDbContext<ApplicationDbContext>(
+                option => option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+                );
+            builder.Services.AddScoped<ICinema,CinemaRepository>(); 
+            builder.Services.AddScoped<IMovie,MovieRepository>(); 
+            builder.Services.AddScoped<ICategory,CategoryRepository>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

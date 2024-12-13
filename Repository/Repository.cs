@@ -1,6 +1,7 @@
 ﻿using ETickets.Data;
 using ETickets.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 
 namespace ETickets.Repository
@@ -32,15 +33,12 @@ namespace ETickets.Repository
         {
             Context.SaveChanges();
         }
-        public IQueryable<T> Get(Expression<Func<T, bool>>? filter = null, Expression<Func<T, object>>[]? includeprops = null, bool tracked = true)
+        public IQueryable<T> Get(Expression<Func<T, bool>>? filter = null,Func<IQueryable<T>,IIncludableQueryable<T,object>> includeprops = null, bool tracked = true)
         {
             IQueryable<T> query = DbSet;
             if (includeprops != null)
             {
-                foreach (var prop in includeprops)
-                {
-                    query = query.Include(prop);
-                }
+            query= includeprops(query);
             }
             if (filter != null)
             {
@@ -54,9 +52,9 @@ namespace ETickets.Repository
            
         }
 
-        public T? GetOne(Expression<Func<T, bool>>? filter)
+        public T? GetOne(Expression<Func<T, bool>>? filter, Func<IQueryable<T>, IIncludableQueryable<T, object>> includeprops = null, bool tracked = true)
         {
-            return Get(filter).FirstOrDefault();    
+            return Get(filter, includeprops).FirstOrDefault();    
         }
     }
 

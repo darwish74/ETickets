@@ -1,46 +1,42 @@
 using ETickets.Data;
 using ETickets.Models;
+using ETickets.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Versioning;
 using System.Diagnostics;
+using System.Linq.Expressions;
 
 namespace ETickets.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IMovie _movie;
+        public HomeController(IMovie _movie)
         {
-            _logger = logger;
+            this._movie = _movie;
         }
-        private readonly ApplicationDbContext _context= new ApplicationDbContext();
         public IActionResult Index()
         {
-            var Movies=_context.Movies.Include(c=>c.category).Include(G=>G.cinema).ToList();  
+            var Movies= _movie.Get(includeprops: e => e.Include(e => e.category).Include(c => c.cinema)).ToList();  
             return View(Movies);
         }
-        public IActionResult Details(int id) 
+        public IActionResult Details(int id)
         {
-            var movie = _context.Movies
-                        .Include(e=>e.category)
-                        .Include(c=>c.cinema)
-                        .Include(A=>A.ActorMovies)
-                        .ThenInclude(A=>A.Actor)
-                        .FirstOrDefault(a=>a.Id==id);
+         
+            var movie = _movie.GetOne(filter: e => e.Id == id,includeprops: e => e.Include(e => e.category).Include(e => e.cinema).Include(e => e.ActorMovies).ThenInclude(e => e.Actor));
+            movie.NoOfViews++;
+            _movie.Commit();
             return View(movie);
         }
         public IActionResult Search(string name)
         {
-            if(string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(name))
             {
                 return View();
             }
-            var movies = _context.Movies
-                        .Include(e=>e.category)
-                        .Include(e => e.cinema)
-                        .Where(a=>a.Name.ToLower().Contains(name.ToLower())).ToList();
+            
+            var movies = _movie.Get(includeprops: e => e.Include(e => e.category).Include(c => c.cinema), filter: a => a.Name.ToLower().Contains(name.ToLower())).ToList();
             return View("Index", movies);
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
