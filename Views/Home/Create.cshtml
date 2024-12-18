@@ -3,15 +3,14 @@
 @{
     ViewData["Title"] = "Create";
 }
-
 <h1>Create</h1>
 
 <h4>Movie</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form asp-action="Create" asp-controller="Home" class="form form-control">
+            <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -19,11 +18,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="Image" class="control-label"></label>
-                <input type="file" class="form-control" id="productImg" name="file" placeholder="Product Img" accept="image/*" onchange="previewImage(event)" value="@Model.Image">
-                <span class="text-danger" asp-validation-for="@Model.Image"></span>
-            </div>
-            <div class="mb-3">
-                <img id="imagePreview" src="#" alt="Image Preview" style="max-width: 20%; height: auto; display: none;" />
+                <input asp-for="Image" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
@@ -34,6 +30,11 @@
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NoOfViews" class="control-label"></label>
+                <input asp-for="NoOfViews" class="form-control" />
+                <span asp-validation-for="NoOfViews" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="TrailerURl" class="control-label"></label>
@@ -51,28 +52,12 @@
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="category" class="control-label"></label>
-                <div class="mb-3">
-                    <select class="form-select" name="CategoryId">
-                        @foreach (var item in (List<Category>)ViewData["categories"])
-                        {
-                            <option value="@item.Id">@item.Name</option>
-                        }
-                    </select>
-                    <span class="text-danger" asp-validation-for="@Model.CategoryId"></span>
-                </div>
+                <label asp-for="CategoryId" class="control-label"></label>
+                <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="cinema" class="control-label"></label>
-                <div class="mb-3">
-                    <select class="form-select" name="CategoryId">
-                        @foreach (var item in (List<Cinema>)ViewData["Cinemas"])
-                        {
-                            <option value="@item.Id">@item.Name</option>
-                        }
-                    </select>
-                    <span class="text-danger" asp-validation-for="@Model.CategoryId"></span>
-                </div>
+                <label asp-for="CinemaId" class="control-label"></label>
+                <select asp-for="CinemaId" class ="form-control" asp-items="ViewBag.CinemaId"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -84,20 +69,4 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-<script>
-    function previewImage(event) {
-        const input = event.target;
-        const imagePreview = document.getElementById("imagePreview");
 
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-
-            reader.onload = function (e) {
-                imagePreview.src = e.target.result;
-                imagePreview.style.display = "block";
-            };
-
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-</script>
