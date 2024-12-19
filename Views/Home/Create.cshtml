@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Create";
+    SelectList CategoryItems = new SelectList(ViewBag.Categories, "Id", "Name"); 
+    SelectList CinemaItems = new SelectList(ViewBag.Cinemas,"Id","Name");
 }
 <h1>Create</h1>
 
@@ -9,18 +11,22 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create" asp-controller="Home" class="form form-control">
+        <form asp-action="Create" asp-controller="Home" class="form form-control" enctype="multipart/form-data">
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Image" class="control-label"></label>
-                <input asp-for="Image" class="form-control" />
+            <div class="mb-3">
+                <label asp-for="Image" class="form-label"></label>
+                <input asp-for="Image" class="form-control" type="file" name="file" accept="image/*" onchange="previewImage(event)" />
                 <span asp-validation-for="Image" class="text-danger"></span>
             </div>
+            <div class="mb-3">
+                <img id="imagePreview" src="#" alt="Image Preview" style="max-width: 20%; height: auto; display: none;" />
+            </div>
+
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
                 <input asp-for="Price" class="form-control" />
@@ -30,11 +36,6 @@
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NoOfViews" class="control-label"></label>
-                <input asp-for="NoOfViews" class="form-control" />
-                <span asp-validation-for="NoOfViews" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="TrailerURl" class="control-label"></label>
@@ -53,13 +54,17 @@
             </div>
             <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
+                <select asp-for="CategoryId" class="form-control" asp-items="CategoryItems">
+                <option value="">__select Department__</option>
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="CinemaId" class="control-label"></label>
-                <select asp-for="CinemaId" class ="form-control" asp-items="ViewBag.CinemaId"></select>
+                <select asp-for="CinemaId" class ="form-control" asp-items="CinemaItems">
+                    <option value="">__select Cinema__</option>
+                </select>
             </div>
-            <div class="form-group">
+            <div class="form-group m-3">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
@@ -69,4 +74,25 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+@section scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        function previewImage(event) {
+            const input = event.target;
+            const imagePreview = document.getElementById("imagePreview");
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = "block";
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+}
 

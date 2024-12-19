@@ -1,4 +1,5 @@
 ﻿using ETickets.Data;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -10,21 +11,27 @@ namespace ETickets.Models
         [Required]
         [MaxLength(50)]
         [MinLength(3)]
-        [UnqiueName]
+        [UniqueName]
         public string Name { get; set; }
-        [Required]  
-        [RegularExpression("\\W+\\.(png|jpg)")]
         public string Image { get; set; }
         [Required]
         public double Price { get; set; }
+        [Required]
+        [MaxLength(150)]
+        [MinLength(20)]
         public string Description { get; set; }
         public int NoOfViews { get; set; }
         [Required]
         public string TrailerURl { get; set; }
         [Required]
         public DateTime StartDate { get; set; }
+        [Required]
         public DateTime EndDate { get; set; }
+        [Required]
+        [Display(Name="Category")]
         public int CategoryId { get; set; }
+        [Required]
+        [Display(Name = "Cinema")]
         public int CinemaId { get; set; }
         public Category category { get; set; }
         public Cinema cinema { get; set; }

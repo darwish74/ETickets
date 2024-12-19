@@ -8,6 +8,7 @@ namespace ETickets.Repository
     {
         public MovieRepository(ApplicationDbContext _context) : base(_context)
         {
+
         }
     }
 }
