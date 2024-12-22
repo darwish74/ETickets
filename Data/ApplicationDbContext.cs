@@ -1,9 +1,11 @@
 ﻿using ETickets.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ETickets.Models.ViewModel;
 
 namespace ETickets.Data
 {
-    public class ApplicationDbContext:DbContext
+    public class ApplicationDbContext:IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
@@ -21,6 +23,7 @@ namespace ETickets.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<ActorMovie>()
                 .HasKey(am => new { am.ActorId, am.MovieId });
             modelBuilder.Entity<ActorMovie>()
@@ -32,5 +35,6 @@ namespace ETickets.Data
                 .WithMany(m => m.ActorMovies)
                 .HasForeignKey(am => am.MovieId);
         }
+        public DbSet<ETickets.Models.ViewModel.ApplicationUserVM> ApplicationUserVM { get; set; } = default!;
     }
 }
