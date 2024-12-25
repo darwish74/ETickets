@@ -26,7 +26,6 @@ namespace ETickets
             builder.Services.AddScoped<ICategory,CategoryRepository>();
             builder.Services.AddScoped<IActor,ActorRepository>();
             var app = builder.Build();
-
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {

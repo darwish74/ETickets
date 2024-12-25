@@ -16,11 +16,12 @@ namespace ETickets.Data
         public DbSet<Cinema> Cinemas {  get; set; } 
         public DbSet<Movie> Movies { get; set; }
         public DbSet<ActorMovie> ActorMovies { get; set; }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=E-Ticket;Integrated Security=True;TrustServerCertificate=True");
-        }
+        public DbSet<ETickets.Models.ViewModel.ApplicationUserVM> ApplicationUserVM { get; set; } = default!;
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    base.OnConfiguring(optionsBuilder);
+        //    optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=E-Ticket;Integrated Security=True;TrustServerCertificate=True");
+        //}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -35,6 +36,6 @@ namespace ETickets.Data
                 .WithMany(m => m.ActorMovies)
                 .HasForeignKey(am => am.MovieId);
         }
-        public DbSet<ETickets.Models.ViewModel.ApplicationUserVM> ApplicationUserVM { get; set; } = default!;
+        
     }
 }
