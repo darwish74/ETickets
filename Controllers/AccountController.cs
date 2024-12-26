@@ -58,11 +58,21 @@ namespace ETickets.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Login(LoginVM LoginVM)
+        public async Task<IActionResult> Login(LoginVM LoginVM)
         {
             if (ModelState.IsValid)
             {
-
+             ApplicationUser user=await userManager.FindByNameAsync(LoginVM.Name);
+                if (user != null)
+                {
+                bool found=await userManager.CheckPasswordAsync(user, LoginVM.Password);
+                    if (found) 
+                    { 
+                    await signInManager.SignInAsync(user,LoginVM.RememberMe);
+                    return RedirectToAction("Index", "Home");
+                    }
+                }
+                ModelState.AddModelError("", "UserName Or Password wrong");
             }
             return View();
         }
