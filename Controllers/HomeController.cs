@@ -2,6 +2,7 @@ using ETickets.Data;
 using ETickets.Models;
 using ETickets.Repository;
 using ETickets.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
@@ -28,6 +29,7 @@ namespace ETickets.Controllers
             var Movies = _movie.Get(includeprops: e => e.Include(e => e.category).Include(c => c.cinema)).ToList();
             return View(Movies);
         }
+        [Authorize]
         public IActionResult IndexAdmin()
         {
             var Movies = _movie.Get(includeprops: e => e.Include(e => e.category).Include(c => c.cinema)).ToList();

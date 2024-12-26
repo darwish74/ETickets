@@ -52,6 +52,25 @@ namespace ETickets.Controllers
 
             return View(userVM);
         }
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Login(LoginVM LoginVM)
+        {
+            if (ModelState.IsValid)
+            {
+
+            }
+            return View();
+        }
+        public async Task<IActionResult> SignOut()
+        {
+            await signInManager.SignOutAsync();
+            return View("Login");
+        }
 
 
     }

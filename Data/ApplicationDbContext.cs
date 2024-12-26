@@ -36,6 +36,7 @@ namespace ETickets.Data
                 .WithMany(m => m.ActorMovies)
                 .HasForeignKey(am => am.MovieId);
         }
+        public DbSet<ETickets.Models.ViewModel.LoginVM> LoginVM { get; set; } = default!;
         
     }
 }
