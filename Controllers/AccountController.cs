@@ -37,6 +37,8 @@ namespace ETickets.Controllers
 
                 if (result.Succeeded)
                 {
+                    await userManager.AddToRoleAsync(user, "Admin");
+                  
                     await signInManager.SignInAsync(user,false);
                     // Optionally, redirect or return success message
                     return RedirectToAction("Index", "Home");
