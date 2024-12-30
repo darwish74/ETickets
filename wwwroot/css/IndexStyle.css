@@ -51,3 +51,59 @@
         width: 100%;
     }
 }
+.navbar-nav .nav-link {
+    color: #ffffff !important; /* Change this to your desired color */
+}
+
+    .navbar-nav .nav-link:hover {
+        color: #ffcc00 !important; /* Change this to the hover color */
+    }
+.navbar .form-control {
+    width: 300px; /* Adjust the width of the search bar as needed */
+}
+
+.navbar-nav .nav-link {
+    color: #fff; /* Adjust nav item color */
+}
+
+    .navbar-nav .nav-link:hover {
+        color: #ffcc00; /* Adjust hover color */
+    }
+.card {
+    transition: transform 0.3s, box-shadow 0.3s;
+    border-radius: 10px;
+}
+
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+.movie-img {
+    height: 300px;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+}
+
+.badge {
+    font-size: 0.85rem;
+    padding: 0.5em 1em;
+}
+
+.btn-outline-primary {
+    border: 2px solid #0d6efd;
+}
+
+    .btn-outline-primary:hover {
+        background-color: #0d6efd;
+        color: #fff;
+    }
+
+h2 {
+    font-family: 'Arial', sans-serif;
+    color: #0d6efd;
+    font-weight: bold;
+}
+.navbar-search {
+    margin-right: 60px; /* Adjust as needed */
+}

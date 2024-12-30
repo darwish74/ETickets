@@ -1,22 +1,28 @@
 ﻿@model ICollection<Movie>
 <div class="container mt-5">
+    <h2 class="text-center mb-4">Available Movies</h2>
     <div class="row">
         @foreach (var item in Model)
         {
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <img src="~/Images/movies/@item.Image" alt="@item.Name" class="card-img-top movie-img">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="position-relative">
+                        <img src="~/Images/movies/@item.Image" alt="@item.Name" class="card-img-top movie-img rounded-top">
+                        <span class="badge bg-success position-absolute top-0 start-0 m-2">@((MovieStatus)item.MovieStatus)</span>
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title">@item.Name</h5>
-                        <p class="card-text"><strong>Price:</strong> @item.Price</p>
-                        <p class="card-text"><strong>Cinema:</strong> @item.cinema.Name</p>
-                        <p class="card-text"><strong>Start Date:</strong> @item.StartDate</p>
-                        <p class="card-text"><strong>End Date:</strong> @item.EndDate</p>
-                        <p class="card-text"><strong>Category:</strong>  <a href="/Category/Index/@item.CategoryId"> @item.category.Name</a></p>
-                        <span class="badge bg-primary">@((MovieStatus)item.MovieStatus)</span>
-                        <div class="d-flex justify-content-between mt-3">
-                            <a href="/Home/Details/@item.Id" class="btn btn-outline-primary">More Details</a>
-                            <button class="btn btn-success">Book Ticket</button>
+                        <h5 class="card-title text-primary fw-bold">@item.Name</h5>
+                        <p class="card-text mb-2"><strong>Price:</strong> @item.Price</p>
+                        <p class="card-text mb-2"><strong>Cinema:</strong> @item.cinema.Name</p>
+                        <p class="card-text mb-2"><strong>Start Date:</strong> @item.StartDate.ToString("MMMM dd, yyyy")</p>
+                        <p class="card-text mb-2"><strong>End Date:</strong> @item.EndDate.ToString("MMMM dd, yyyy")</p>
+                        <p class="card-text mb-3">
+                            <strong>Category:</strong>
+                            <a href="/Category/Index/@item.CategoryId" class="text-decoration-none text-primary">@item.category.Name</a>
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="/Home/Details/@item.Id" class="btn btn-outline-primary btn-sm">More Details</a>
+                            <button class="btn btn-success btn-sm">Book Ticket</button>
                         </div>
                     </div>
                 </div>
