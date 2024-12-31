@@ -2,7 +2,6 @@
 using ETickets.Models.ViewModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-
 namespace ETickets.Controllers
 {
     public class AccountController : Controller

@@ -1,0 +1,59 @@
+﻿@model ETickets.Models.RequestCinema
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Create New Request</h1>
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white text-center">
+            <h4>Request Cinema</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="CreateNewRequest" class="needs-validation" novalidate>
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label fw-bold"></label>
+                    <input asp-for="Name" class="form-control" placeholder="Enter the name of the cinema" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label fw-bold"></label>
+                    <input asp-for="Description" class="form-control" placeholder="Provide a brief description" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="CinemaLogo" class="form-label fw-bold"></label>
+                    <input asp-for="CinemaLogo" class="form-control" placeholder="Enter the cinema logo URL" />
+                    <span asp-validation-for="CinemaLogo" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Address" class="form-label fw-bold"></label>
+                    <input asp-for="Address" class="form-control" placeholder="Enter the full address" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Details" class="form-label fw-bold"></label>
+                    <textarea asp-for="Details" class="form-control text-secondary" rows="4" placeholder="Add additional details about the cinema"></textarea>
+                    <span asp-validation-for="Details" class="text-danger"></span>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-lg">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="mt-3 text-center">
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
+
+@section Scripts {
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        @if (@TempData["success"] != null)
+        {
+            <script>
+                toastr.success('@TempData["success"]')
+            </script>
+        }
+}
+
+}
+

@@ -25,6 +25,7 @@ namespace ETickets
             builder.Services.AddScoped<IMovie,MovieRepository>(); 
             builder.Services.AddScoped<ICategory,CategoryRepository>();
             builder.Services.AddScoped<IActor,ActorRepository>();
+            builder.Services.AddScoped<IRequestsCinemaRepository,RequestCinemaRepository>();
             var app = builder.Build();
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

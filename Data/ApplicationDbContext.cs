@@ -5,18 +5,19 @@ using ETickets.Models.ViewModel;
 
 namespace ETickets.Data
 {
-    public class ApplicationDbContext:IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
         {
         }
-        public DbSet<Category> Categories {  get; set; }    
-        public DbSet<Actor> Actors {  get; set; }   
-        public DbSet<Cinema> Cinemas {  get; set; } 
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Actor> Actors { get; set; }
+        public DbSet<Cinema> Cinemas { get; set; }
         public DbSet<Movie> Movies { get; set; }
         public DbSet<ActorMovie> ActorMovies { get; set; }
-        public DbSet<ETickets.Models.ViewModel.ApplicationUserVM> ApplicationUserVM { get; set; } = default!;
+        public DbSet<RequestCinema> RequestCinemas { get; set; }
+
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
         //    base.OnConfiguring(optionsBuilder);
@@ -36,7 +37,6 @@ namespace ETickets.Data
                 .WithMany(m => m.ActorMovies)
                 .HasForeignKey(am => am.MovieId);
         }
-        public DbSet<ETickets.Models.ViewModel.LoginVM> LoginVM { get; set; } = default!;
-        
+
     }
 }
