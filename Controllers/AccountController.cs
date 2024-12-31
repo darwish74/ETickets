@@ -9,15 +9,22 @@ namespace ETickets.Controllers
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly RoleManager<IdentityRole> roleManager;
 
-        public AccountController(UserManager<ApplicationUser> userManager,SignInManager<ApplicationUser> signInManager)
+        public AccountController(UserManager<ApplicationUser> userManager,SignInManager<ApplicationUser> signInManager,RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.roleManager = roleManager;
         }
         [HttpGet]
-        public IActionResult Register()
-        {
+        public async Task<IActionResult> Register()
+        {   
+            if(!roleManager.Roles.Any())
+            {
+                await roleManager.CreateAsync(new("Admin"));
+                await  roleManager.CreateAsync(new("User"));
+            }
             return View();
         }
         [HttpPost]
@@ -37,7 +44,7 @@ namespace ETickets.Controllers
 
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(user, "Admin");
+                    await userManager.AddToRoleAsync(user, "User");
                   
                     await signInManager.SignInAsync(user,false);
                     // Optionally, redirect or return success message

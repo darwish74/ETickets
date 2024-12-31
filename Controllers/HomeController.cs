@@ -29,7 +29,7 @@ namespace ETickets.Controllers
             var Movies = _movie.Get(includeprops: e => e.Include(e => e.category).Include(c => c.cinema)).ToList();
             return View(Movies);
         }
-        [Authorize]
+        [Authorize(Roles ="Admin")]
         public IActionResult IndexAdmin()
         {
             var Movies = _movie.Get(includeprops: e => e.Include(e => e.category).Include(c => c.cinema)).ToList();
