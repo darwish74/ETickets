@@ -8,5 +8,7 @@
         public string CinemaLogo { get; set; }
         public string Address { get; set; }
         public string Details {  get; set; }
+        public string status { get; set; } = "Pendding";
+
     }
 }

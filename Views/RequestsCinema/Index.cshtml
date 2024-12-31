@@ -1,0 +1,79 @@
+﻿@model IEnumerable<ETickets.Models.RequestCinema>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                status
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CinemaLogo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Details)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+                <td>
+                    @if (item.status == "pending")
+                    {
+                        <button href="" class="btn btn-warning btn-sm unlock-button">@item.status</button>
+                    }
+                    else if (item.status == "rejected")
+                    {
+                        <button href="" class="btn btn-danger btn-sm unlock-button">@item.status</button>
+                    }
+                    else
+                    {
+                        <button href="" class="btn btn-success btn-sm unlock-button">@item.status</button>
+
+                    }
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CinemaLogo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Details)
+            </td>
+            <td>
+                    <a href="" class="btn btn-success btn-sm unlock-button">Accept</a>
+                    <a href="" class="btn btn-danger btn-sm unlock-button">Reject</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,5 +1,7 @@
 ﻿using ETickets.Models;
+using ETickets.Repository;
 using ETickets.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ETickets.Controllers
@@ -12,6 +14,12 @@ namespace ETickets.Controllers
         {
             this.requestsCinemaRepository = requestsCinemaRepository;
         }
+        [Authorize(Roles="Admin")]
+        public IActionResult Index()
+        {
+            var Requests = requestsCinemaRepository.Get();
+            return View(Requests);
+        }
         [HttpGet]
         public IActionResult CreateNewRequest()
         {
@@ -23,6 +31,7 @@ namespace ETickets.Controllers
             if (ModelState.IsValid)
             {
                 requestsCinemaRepository.Create(requestCinema);
+                requestsCinemaRepository.Commit();  
                 TempData["success"] = "The request has been added successfully";
                 return RedirectToAction("Index","Home");   
             }
