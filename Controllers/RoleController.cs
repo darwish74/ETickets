@@ -40,6 +40,5 @@ namespace ETickets.Controllers
             }
             return View(role);
         }
-
     }
 }

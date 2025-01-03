@@ -25,20 +25,31 @@ namespace ETickets.Controllers
             this._category = _category;
             this._cinema = _cinema;
         }
-        public IActionResult Index()
+        public IActionResult Index(int PageNumber = 1, int PageSize = 6)
         {
-            var Movies = _movie.Get(includeprops: e => e.Include(e => e.category).Include(c => c.cinema)).ToList();
-            return View(Movies);
+            var moviesQuery = _movie.Get(includeprops: e => e.Include(e => e.category).Include(c => c.cinema));
+           
+            var totalMovies = moviesQuery.Count();
+           
+            var totalPages = (int)Math.Ceiling((double)totalMovies / PageSize);
+
+            var paginatedMovies = moviesQuery
+                .Skip((PageNumber - 1) * PageSize)
+                .Take(PageSize)
+                .ToList();
+            ViewBag.TotalPages = totalPages;
+            ViewBag.CurrentPage = PageNumber;
+            return View(paginatedMovies);
         }
 
-        [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
         public IActionResult IndexAdmin(string searchQuery, int PageNumber = 1, int PageSize = 5)
         {
             var movies = _movie.Get(includeprops: e => e.Include(e => e.category).Include(c => c.cinema));
 
             if (!string.IsNullOrEmpty(searchQuery))
             {
-                movies = movies.Where(e => e.Name.Contains(searchQuery, StringComparison.OrdinalIgnoreCase));
+                movies = movies.Where(e => e.Name.ToLower().Contains(searchQuery.ToLower()));
             }
 
             var totalMovies = movies.Count();
