@@ -9,6 +9,8 @@ namespace ETickets
 {
     public class Program
     {
+        private static object configuration;
+
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -21,11 +23,11 @@ namespace ETickets
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
            .AddEntityFrameworkStores<ApplicationDbContext>()
            .AddDefaultTokenProviders();
-            builder.Services.AddScoped<ICinema,CinemaRepository>(); 
-            builder.Services.AddScoped<IMovie,MovieRepository>(); 
-            builder.Services.AddScoped<ICategory,CategoryRepository>();
-            builder.Services.AddScoped<IActor,ActorRepository>();
-            builder.Services.AddScoped<IRequestsCinemaRepository,RequestCinemaRepository>();
+            builder.Services.AddScoped<ICinema, CinemaRepository>();
+            builder.Services.AddScoped<IMovie, MovieRepository>();
+            builder.Services.AddScoped<ICategory, CategoryRepository>();
+            builder.Services.AddScoped<IActor, ActorRepository>();
+            builder.Services.AddScoped<IRequestsCinemaRepository, RequestCinemaRepository>();
             var app = builder.Build();
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

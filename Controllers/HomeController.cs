@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using NuGet.Versioning;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq.Expressions;
 
 namespace ETickets.Controllers
@@ -29,12 +30,31 @@ namespace ETickets.Controllers
             var Movies = _movie.Get(includeprops: e => e.Include(e => e.category).Include(c => c.cinema)).ToList();
             return View(Movies);
         }
-        [Authorize(Roles ="Admin")]
-        public IActionResult IndexAdmin()
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult IndexAdmin(string searchQuery, int PageNumber = 1, int PageSize = 5)
         {
-            var Movies = _movie.Get(includeprops: e => e.Include(e => e.category).Include(c => c.cinema)).ToList();
-            return View(Movies);
+            var movies = _movie.Get(includeprops: e => e.Include(e => e.category).Include(c => c.cinema));
+
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                movies = movies.Where(e => e.Name.Contains(searchQuery, StringComparison.OrdinalIgnoreCase));
+            }
+
+            var totalMovies = movies.Count();
+            var totalPages = (int)Math.Ceiling((double)totalMovies / PageSize);
+
+            var paginatedMovies = movies.Skip((PageNumber - 1) * PageSize).Take(PageSize).ToList();
+
+            ViewBag.TotalPages = totalPages;
+            ViewBag.CurrentPage = PageNumber;
+            ViewBag.SearchQuery = searchQuery;
+
+            return View(paginatedMovies);
         }
+
+
+
         public IActionResult Details(int id)
         {
 
@@ -60,51 +80,51 @@ namespace ETickets.Controllers
             ViewBag.Cinemas = _cinema.Get();
             return View(new Movie());
         }
-      
+
         [HttpPost]
         public IActionResult Create(Movie movie, IFormFile? file)
         {
-                ModelState.Remove("Image");
-                ModelState.Remove("Category");
-                ModelState.Remove("Cinema");
-                ModelState.Remove("ActorMovies");
+            ModelState.Remove("Image");
+            ModelState.Remove("Category");
+            ModelState.Remove("Cinema");
+            ModelState.Remove("ActorMovies");
 
-                if (ModelState.IsValid)
+            if (ModelState.IsValid)
+            {
+                if (file != null && file.Length > 0)
                 {
-                    if (file != null && file.Length > 0)
-                    {
-                        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\movies", fileName);
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\movies", fileName);
 
-                        using (var stream = System.IO.File.Create(filePath))
-                        {
-                            file.CopyTo(stream);
-                        }
-
-                        movie.Image = fileName;
-                    }
-                    else
+                    using (var stream = System.IO.File.Create(filePath))
                     {
-                        ModelState.AddModelError("Image", "Please upload an image.");
-                        ViewBag.Categories = _category.Get();
-                        ViewBag.Cinemas = _cinema.Get();
-                        return View(movie);
+                        file.CopyTo(stream);
                     }
 
-                    _movie.Create(movie);
-                    _movie.Commit();
-                    TempData["message"] = "Add Movie successfully";
-                    return RedirectToAction("Index");
+                    movie.Image = fileName;
+                }
+                else
+                {
+                    ModelState.AddModelError("Image", "Please upload an image.");
+                    ViewBag.Categories = _category.Get();
+                    ViewBag.Cinemas = _cinema.Get();
+                    return View(movie);
                 }
 
-                ViewBag.Categories = _category.Get();
-                ViewBag.Cinemas = _cinema.Get();
-                return View(movie);
+                _movie.Create(movie);
+                _movie.Commit();
+                TempData["message"] = "Add Movie successfully";
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.Categories = _category.Get();
+            ViewBag.Cinemas = _cinema.Get();
+            return View(movie);
         }
         public IActionResult Edit(int id)
         {
-           return  View();
+            return View();
         }
 
-        }
     }
+}
