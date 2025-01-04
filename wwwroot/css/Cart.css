@@ -1,0 +1,34 @@
+﻿.cart-header {
+    background-color: #0a4275;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+.cart-summary {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 5px;
+}
+
+    .cart-summary h5 {
+        margin-bottom: 1rem;
+    }
+
+.cart-table {
+    margin-bottom: 2rem;
+}
+
+    .cart-table img {
+        width: 80px;
+        height: auto;
+    }
+
+.btn-checkout {
+    background-color: #0a4275;
+    color: white;
+}
+
+    .btn-checkout:hover {
+        background-color: #093861;
+    }

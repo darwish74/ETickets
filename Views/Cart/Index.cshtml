@@ -1,0 +1,56 @@
+﻿<div class="container my-5">
+    <div class="cart-header">
+        <h1>Your Cart</h1>
+        <p>Review your selected items before proceeding to checkout.</p>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-lg-8">
+            <!-- Cart Items Table -->
+            <div class="cart-table">
+                <table class="table table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                   @foreach(var item in Model)
+                   { <tbody>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="https://via.placeholder.com/80" alt="Item Image" class="me-3">
+                                    <span>Movie Title</span>
+                                </div>
+                            </td>
+                            <td>
+                                <input type="number" class="form-control" value="1" min="1">
+                            </td>
+                            <td>$10.00</td>
+                            <td>$10.00</td>
+                            <td>
+                                <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Remove</button>
+                            </td>
+                        </tr>
+                        <!-- Repeat for more items -->
+                    </tbody>
+                   }
+                </table>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <!-- Cart Summary -->
+            <div class="cart-summary">
+                <h5>Order Summary</h5>
+                <p>Subtotal: $10.00</p>
+                <p>Tax: $1.00</p>
+                <p><strong>Total: $11.00</strong></p>
+                <button class="btn btn-checkout btn-block w-100">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+</div>

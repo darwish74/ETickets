@@ -17,6 +17,7 @@ namespace ETickets.Data
         public DbSet<Movie> Movies { get; set; }
         public DbSet<ActorMovie> ActorMovies { get; set; }
         public DbSet<RequestCinema> RequestCinemas { get; set; }
+        public DbSet<Cart> Carts { get; set; }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
