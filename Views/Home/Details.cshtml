@@ -56,9 +56,22 @@
                         </video>
                     </div>
 
-                    <!-- Book Ticket Button -->
-                    <div class="mt-4 text-center">
-                        <button class="btn btn-success btn-lg">Book Ticket</button>
+                    <!-- Ticket Booking Section -->
+                    <div class="mt-4">
+                        <p class="fw-bold">Select Number of Tickets:</p>
+                        <form asp-action="BookTicket" asp-controller="Cart" method="post">
+                            <input type="hidden" name="MovieId" value="@Model.Id" />
+                            <div class="input-group mb-3">
+                                <select name="TicketCount" class="form-select" required>
+                                    @for (int i = 1; i <= 10; i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                                <span class="input-group-text">Tickets</span>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-lg w-100">Book Ticket</button>
+                        </form>
                     </div>
                 </div>
             </div>
