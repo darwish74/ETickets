@@ -4,55 +4,69 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
 <div class="container mt-5">
-    <div class="row">
-        <!-- Movie Poster -->
-        <div class="card h-100">
-            <span class="badge bg-primary mb-3" style="width:20%">@((MovieStatus)Model.MovieStatus)</span>
-        </div>
-        <div class="col-md-6">
-            <img src="~/Images/movies/@Model.Image" alt="@Model.Name" class="img-fluid">
-        </div>
-
-        <!-- Movie Details -->
-        <div class="col-md-6">
-            <h2>@Model.Name</h2>
-            <p class="mt-3">
-                @Model.Description
-            </p>
-
-            <p><strong>Price:</strong> @Model.Price.ToString("F2")</p>
-            <p><strong>Cinema:</strong> @Model.cinema?.Name</p>
-            <p><strong>Start Date:</strong> @Model.StartDate.ToString("M/d/yyyy h:mm tt")</p>
-            <p><strong>End Date:</strong> @Model.EndDate.ToString("M/d/yyyy h:mm tt")</p>
-            <p><strong>Category:</strong> @Model.category?.Name</p>
-            <p><strong>NO Of Views:</strong> @Model.NoOfViews</p>
-
-            <!-- Actors -->
-            <p><strong>Actors:</strong></p>
-            <div class="d-flex">
-                @foreach (var item in Model.ActorMovies)
-                {
-                    <a href="/Actor/Index/@item.Actor.Id"><img src="~/Images/cast/@item.Actor.profilePicture" alt="" class="rounded-circle me-2" width="50" height="50"></a> 
-                }
+    <!-- Movie Details Section -->
+    <div class="card shadow-lg border-0">
+        <div class="row g-0">
+            <!-- Movie Poster -->
+            <div class="col-md-6">
+                <img src="~/Images/movies/@Model.Image" alt="@Model.Name" class="img-fluid rounded-start shadow-sm" style="object-fit: cover; height: 100%;">
             </div>
 
-            <!-- Trailer -->
-            <p class="mt-3"><strong>Trailer:</strong></p>
-            <video class="w-100" controls>
-                <source src="@Model.TrailerURl" type="video/mp4">
-            </video>
+            <!-- Movie Details -->
+            <div class="col-md-6">
+                <div class="card-body">
+                    <!-- Status Badge -->
+                    <span class="badge bg-primary mb-3">@((MovieStatus)Model.MovieStatus)</span>
 
-            <!-- Book Ticket Button -->
-            <div class="mt-4">
-                <button class="btn btn-success btn-lg">Book Ticket</button>
+                    <!-- Movie Title -->
+                    <h2 class="card-title fw-bold">@Model.Name</h2>
+
+                    <!-- Movie Description -->
+                    <p class="mt-3">@Model.Description</p>
+
+                    <!-- Additional Details -->
+                    <ul class="list-unstyled">
+                        <li><strong>Price:</strong> $@Model.Price.ToString("F2")</li>
+                        <li><strong>Cinema:</strong> @Model.cinema?.Name</li>
+                        <li><strong>Start Date:</strong> @Model.StartDate.ToString("M/d/yyyy h:mm tt")</li>
+                        <li><strong>End Date:</strong> @Model.EndDate.ToString("M/d/yyyy h:mm tt")</li>
+                        <li><strong>Category:</strong> @Model.category?.Name</li>
+                        <li><strong>NO Of Views:</strong> @Model.NoOfViews</li>
+                    </ul>
+
+                    <!-- Actors -->
+                    <div class="mt-3">
+                        <p class="fw-bold">Actors:</p>
+                        <div class="d-flex">
+                            @foreach (var item in Model.ActorMovies)
+                            {
+                                <a href="/Actor/Index/@item.Actor.Id" class="me-2">
+                                    <img src="~/Images/cast/@item.Actor.profilePicture" alt="@item.Actor.FirstName" class="rounded-circle shadow-sm" style="width: 50px; height: 50px;" title="@item.Actor.FirstName">
+                                </a>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Trailer -->
+                    <div class="mt-4">
+                        <p class="fw-bold">Trailer:</p>
+                        <video class="w-100 rounded shadow-sm" controls>
+                            <source src="@Model.TrailerURl" type="video/mp4">
+                        </video>
+                    </div>
+
+                    <!-- Book Ticket Button -->
+                    <div class="mt-4 text-center">
+                        <button class="btn btn-success btn-lg">Book Ticket</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <!-- Back and Edit Buttons -->
+    <div class="mt-4 text-center">
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
 </div>
