@@ -19,27 +19,39 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                   @foreach(var item in Model)
-                   { <tbody>
-                        <tr>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <img src="https://via.placeholder.com/80" alt="Item Image" class="me-3">
-                                    <span>Movie Title</span>
-                                </div>
-                            </td>
-                            <td>
-                                <input type="number" class="form-control" value="1" min="1">
-                            </td>
-                            <td>$10.00</td>
-                            <td>$10.00</td>
-                            <td>
-                                <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Remove</button>
-                            </td>
-                        </tr>
-                        <!-- Repeat for more items -->
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="~/Images/movies/@item.Movie.Image" alt="Item Image" class="me-3" style="width: 50px; height: auto;">
+                                        <span>@item.Movie.Name</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <form asp-action="UpdateQuantity" asp-controller="Cart" method="post">
+                                            <input type="hidden" name="itemId" value="@item.Movie.Id" />
+                                            <input type="hidden" name="action" value="decrement" />
+                                            <button class="btn btn-outline-secondary btn-sm" type="submit">-</button>
+                                        </form>
+                                        <span class="mx-2">@item.Count</span>
+                                        <form asp-action="UpdateQuantity" asp-controller="Cart" method="post">
+                                            <input type="hidden" name="itemId" value="@item.Movie.Id" />
+                                            <input type="hidden" name="action" value="increment" />
+                                            <button class="btn btn-outline-secondary btn-sm" type="submit">+</button>
+                                        </form>
+                                    </div>
+                                </td>
+                                <td>@item.Movie.Price</td>
+                                <td>@((@item.Count) * (@item.Movie.Price))</td>
+                                <td>
+                                    <a href="/Cart/Remove?itemId=@item.Movie.Id" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Remove</a>
+                                </td>
+                            </tr>
+                        }
                     </tbody>
-                   }
                 </table>
             </div>
         </div>
@@ -47,10 +59,8 @@
             <!-- Cart Summary -->
             <div class="cart-summary">
                 <h5>Order Summary</h5>
-                <p>Subtotal: $10.00</p>
-                <p>Tax: $1.00</p>
-                <p><strong>Total: $11.00</strong></p>
-                <button class="btn btn-checkout btn-block w-100">Proceed to Checkout</button>
+                <p><strong>Total: @ViewBag.Total</strong></p>
+                <a href="/Cart/Pay" class="btn btn-checkout btn-block w-100">Pay</a>
             </div>
         </div>
     </div>

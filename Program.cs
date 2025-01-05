@@ -4,6 +4,7 @@ using ETickets.Repository;
 using ETickets.Repository.IRepository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 
 namespace ETickets
 {
@@ -17,6 +18,8 @@ namespace ETickets
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+            StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
             builder.Services.AddDbContext<ApplicationDbContext>(
                 option => option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
                 );

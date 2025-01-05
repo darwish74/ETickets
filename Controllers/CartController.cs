@@ -2,6 +2,8 @@
 using ETickets.Repository.IRepository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Stripe.Checkout;
 
 namespace ETickets.Controllers
 {
@@ -17,28 +19,102 @@ namespace ETickets.Controllers
         }
         public IActionResult Index()
         {
-            var carts = _cart.Get();
+            var carts = _cart.Get(includeprops:e=>e.Include(e=>e.Movie),filter: e => e.ApplicationUserId == userManager.GetUserId(User)).ToList();
+            ViewBag.Total = carts.Sum(c => c.Movie.Price * c.Count);
             return View(carts);
         }
         [HttpPost]
         public IActionResult BookTicket(int TicketCount,int MovieId)
         {
             var userId = userManager.GetUserId(User);
+
             if(userId!=null)
             {
-                _cart.Create(new()
+                var item=_cart.Get(filter: e => e.ApplicationUserId == userId && e.MovieId== MovieId).FirstOrDefault();
+                if (item != null)
                 {
-                    ApplicationUserId = userId,
-                    MovieId= MovieId,
-                    Count= TicketCount,
-                    time=DateTime.Now
-                });
-                _cart.Commit(); 
-                TempData["success"] = "Ticket has been booked and Add TO cart Successfully";
-                return RedirectToAction("index","home");
+                    item.Count += TicketCount;
+                    _cart.Commit();
+                }
+                else
+                {
+                    _cart.Create(new()
+                    {
+                        ApplicationUserId = userId,
+                        MovieId = MovieId,
+                        Count = TicketCount,
+                        time = DateTime.Now
+                    });
+                    _cart.Commit();
+                }
+                   
+                    TempData["success"] = "Ticket has been booked and Add TO cart Successfully";
+                    return RedirectToAction("index", "home");
             }
-                return RedirectToAction("Login", "Account");
+                    return RedirectToAction("Login", "Account");
         }
+        [HttpPost]
+        public IActionResult UpdateQuantity(int itemId, string action)
+        {
+            var cartItem = _cart.GetOne(c => c.MovieId == itemId);
+            if (cartItem != null)
+            {
+                if (action == "increment")
+                {
+                    cartItem.Count++;
+                    _cart.Commit();
+                }
+                else if (action == "decrement" && cartItem.Count > 1)
+                {
+                    cartItem.Count--;
+                }
+                _cart.Commit();
+            }
+            return RedirectToAction("Index");
+        }
+        public IActionResult Remove(int itemId)
+        {
+            var cartItem = _cart.GetOne(c => c.MovieId == itemId);
+            if (cartItem != null)
+            {
+                _cart.Delete(cartItem);
+                _cart.Commit();
+            }
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Pay()
+        {
+            var options = new SessionCreateOptions
+            {
+                PaymentMethodTypes = new List<string> { "card" },
+                LineItems = new List<SessionLineItemOptions>(),
+                Mode = "payment",
+                SuccessUrl = $"{Request.Scheme}://{Request.Host}/Checkout/Success",
+                CancelUrl = $"{Request.Scheme}://{Request.Host}/checkout/Cancel",
+            };
+            var carts = _cart.Get(includeprops: e => e.Include(e => e.Movie), filter: e => e.ApplicationUserId == userManager.GetUserId(User)).ToList();
+            foreach (var item in carts)
+            {
+                options.LineItems.Add(new SessionLineItemOptions
+                {
+                    PriceData = new SessionLineItemPriceDataOptions
+                    {
+                        Currency = "egp",
+                        ProductData = new SessionLineItemPriceDataProductDataOptions
+                        {
+                            Name = item.Movie.Name,
+                        },
+                        UnitAmount = (long)item.Movie.Price * 100,
+                    },
+                    Quantity = item.Count,
+                });
+            }
+            var service = new SessionService();
+            var session = service.Create(options);
+            return Redirect(session.Url);
+        }
+
 
     }
 }
