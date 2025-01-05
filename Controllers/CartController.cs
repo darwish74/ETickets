@@ -90,8 +90,8 @@ namespace ETickets.Controllers
                 PaymentMethodTypes = new List<string> { "card" },
                 LineItems = new List<SessionLineItemOptions>(),
                 Mode = "payment",
-                SuccessUrl = $"{Request.Scheme}://{Request.Host}/Checkout/Success",
-                CancelUrl = $"{Request.Scheme}://{Request.Host}/checkout/Cancel",
+                SuccessUrl = $"{Request.Scheme}://{Request.Host}/Cart/PaymentSuccess",
+                CancelUrl = $"{Request.Scheme}://{Request.Host}/Cart/PaymentCancel",
             };
             var carts = _cart.Get(includeprops: e => e.Include(e => e.Movie), filter: e => e.ApplicationUserId == userManager.GetUserId(User)).ToList();
             foreach (var item in carts)
@@ -114,6 +114,18 @@ namespace ETickets.Controllers
             var session = service.Create(options);
             return Redirect(session.Url);
         }
+        public IActionResult PaymentSuccess()
+        {
+            ViewBag.Message = "Your payment was successful! Thank you for your purchase.";
+            return View();
+        }
+
+        public IActionResult PaymentCancel()
+        {
+            ViewBag.Message = "Your payment was canceled. You can try again or contact support.";
+            return View();
+        }
+
 
 
     }
