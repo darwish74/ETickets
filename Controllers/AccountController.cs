@@ -87,9 +87,31 @@ namespace ETickets.Controllers
         public async Task<IActionResult> SignOut()
         {
             await signInManager.SignOutAsync();
-            return View("Login");
+            return RedirectToAction("Login", "Account");
         }
-
-
+        public async Task<IActionResult> Profile()
+        { 
+            var user= await userManager.GetUserAsync(User);
+            return View(new ApplicationUserVM()
+            {
+                UserName = user.UserName,
+                Email=user.Email,
+                Name=user.Name,
+                Address=user.Address
+            });
+        }
+        [HttpPost]
+        public async Task<IActionResult> Profile(ApplicationUserVM userVM)
+        {
+            var user = await userManager.GetUserAsync(User);
+            user.UserName = userVM.UserName;
+            user.Email = userVM.Email;  
+            user.Name = userVM.Name;
+            user.Address = userVM.Address;
+            await userManager.UpdateAsync(user);
+            await signInManager.RefreshSignInAsync(user);
+            TempData["success"] = "Your Info Updated successfully";
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
