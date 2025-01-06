@@ -131,8 +131,5 @@ namespace ETickets.Controllers
             await emailSender.SendEmailAsync(await userManager.GetEmailAsync(user), "failed pay", $"<html><body> <h1>Your payment was canceled. You can try again or contact support.</h1> </body></html>");
             return RedirectToAction("Index", "Home");
         }
-
-
-
     }
 }
