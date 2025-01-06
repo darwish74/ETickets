@@ -1,9 +1,11 @@
 ﻿using ETickets.Models;
 using ETickets.Repository.IRepository;
+using ETickets.Utility;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Stripe.Checkout;
+using System.Threading.Tasks;
 
 namespace ETickets.Controllers
 {
@@ -11,11 +13,12 @@ namespace ETickets.Controllers
     {
         private readonly ICart _cart;
         private readonly UserManager<ApplicationUser> userManager;
-
-        public CartController(ICart cart,UserManager<ApplicationUser> userManager)
+        private readonly IEmailSender emailSender;
+        public CartController(ICart cart,UserManager<ApplicationUser> userManager, IEmailSender emailSender)
         {
             _cart = cart;
             this.userManager = userManager;
+            this.emailSender = emailSender;
         }
         public IActionResult Index()
         {
@@ -114,16 +117,19 @@ namespace ETickets.Controllers
             var session = service.Create(options);
             return Redirect(session.Url);
         }
-        public IActionResult PaymentSuccess()
+        public async Task<IActionResult> PaymentSuccess()
         {
-            ViewBag.Message = "Your payment was successful! Thank you for your purchase.";
-            return View();
+            var user = await userManager.GetUserAsync(User);
+            await emailSender.SendEmailAsync(await userManager.GetEmailAsync(user), "success pay", $"<html><body> <h1>   Your payment was successful! Thank you for your purchase.</h1> </body></html>");
+            return RedirectToAction("Index", "Home");
+         
         }
-
-        public IActionResult PaymentCancel()
+     
+        public async Task<IActionResult> PaymentCancel()
         {
-            ViewBag.Message = "Your payment was canceled. You can try again or contact support.";
-            return View();
+            var user = await userManager.GetUserAsync(User);
+            await emailSender.SendEmailAsync(await userManager.GetEmailAsync(user), "failed pay", $"<html><body> <h1>Your payment was canceled. You can try again or contact support.</h1> </body></html>");
+            return RedirectToAction("Index", "Home");
         }
 
 

@@ -2,6 +2,7 @@ using ETickets.Data;
 using ETickets.Models;
 using ETickets.Repository;
 using ETickets.Repository.IRepository;
+using ETickets.Utility;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Stripe;
@@ -32,6 +33,7 @@ namespace ETickets
             builder.Services.AddScoped<IActor, ActorRepository>();
             builder.Services.AddScoped<IRequestsCinemaRepository, RequestCinemaRepository>();
             builder.Services.AddScoped<ICart, CartRepository>();
+            builder.Services.AddTransient<IEmailSender, EmailSender>();
             var app = builder.Build();
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
