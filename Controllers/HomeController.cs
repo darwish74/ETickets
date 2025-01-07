@@ -124,7 +124,7 @@ namespace ETickets.Controllers
 
                 _movie.Create(movie);
                 _movie.Commit();
-                TempData["message"] = "Add Movie successfully";
+                TempData["success"] = "Add Movie successfully";
                 return RedirectToAction("Index");
             }
 

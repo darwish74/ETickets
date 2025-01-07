@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 namespace ETickets.Controllers
 {
     public class AccountController : Controller
@@ -105,23 +106,25 @@ namespace ETickets.Controllers
         [HttpPost]
         public async Task<IActionResult> Profile(ApplicationUserVM model)
         {
-            if (ModelState.IsValid)
-            {
-                var user = await userManager.GetUserAsync(User); 
+                var user = await userManager.GetUserAsync(User);
                 if (user == null)
                 {
                     ModelState.AddModelError("", "User not found.");
                     return View(model);
                 }
+
                 user.UserName = model.UserName;
                 user.Email = model.Email;
                 user.Name = model.Name;
                 user.Address = model.Address;
+
                 var result = await userManager.UpdateAsync(user);
                 if (result.Succeeded)
                 {
+                    await userManager.AddClaimAsync(user, new Claim("UserName", user.UserName));
+                    await signInManager.RefreshSignInAsync(user);
                     TempData["success"] = "Profile updated successfully.";
-                    return RedirectToAction("Profile");
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
@@ -130,10 +133,10 @@ namespace ETickets.Controllers
                         ModelState.AddModelError("", error.Description);
                     }
                 }
-            }
 
             return View(model);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> updatePhoto(IFormFile photo)
