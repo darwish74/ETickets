@@ -1,5 +1,6 @@
-﻿@model ETickets.Models.ViewModel.ApplicationUserVM
-
+﻿@using Microsoft.AspNetCore.Identity
+@model ETickets.Models.ViewModel.ApplicationUserVM
+@inject UserManager<ApplicationUser> UserManager
 @{
     ViewData["Title"] = "Profile";
 }
@@ -12,7 +13,7 @@
                     <h3 class="mb-0">Update Profile</h3>
                 </div>
                 <div class="card-body">
-                    <form asp-action="Profile">
+                    <form asp-action="Profile" enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
                         <input asp-for="Id" type="hidden" />
@@ -56,12 +57,18 @@
         </div>
     </div>
     <div class="text-center mt-4">
-        <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+        <a asp-action="ChangePassword" class="btn btn-outline-secondary">Change Password</a>
     </div>
 </div>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        @if (@TempData["success"] != null)
+        {
+            <script>
+                toastr.success('@TempData["success"]')
+            </script>
+        }
     }
 }

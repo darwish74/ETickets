@@ -1,0 +1,33 @@
+﻿.profile-card {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+}
+
+    .profile-card img {
+        border-radius: 50%;
+        margin-top: -75px;
+        border: 5px solid white;
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+    }
+
+.profile-header {
+    background-color: #007bff;
+    color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.bio {
+    color: #6c757d;
+    font-style: italic;
+}
+
+.profile-card a {
+    margin: 0 5px;
+    text-decoration: none;
+}

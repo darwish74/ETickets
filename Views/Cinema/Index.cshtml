@@ -1,25 +1,39 @@
 ﻿@model ICollection<Cinema>
 @{
-    ViewData["Title"] = "AllCategories";
+    ViewData["Title"] = "All Cinemas";
 }
 
-<h1>All Cinemas</h1>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">All Cinemas</h1>
 
-<table class="table table-success table-striped">
-    <thead>
-        <tr>
-            <th scope="col">Cinema Name</th>
-            <th scope="col">All Movies</th>
-
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
             <tr>
-                <th scope="row">@item.Name</th>
-                <td><a href="">All Movies</a></td>
+                <th scope="col">Cinema Name</th>
+                <th scope="col" class="text-center">Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var cinema in Model)
+                {
+                    <tr>
+                        <td>@cinema.Name</td>
+                        <td class="text-center">
+                            <a href="/Cinema/Movies/@cinema.Id" class="btn btn-primary btn-sm">
+                                <i class="bi bi-film"></i> View Movies
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="2" class="text-center text-muted">No cinemas found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -132,10 +132,107 @@ namespace ETickets.Controllers
             ViewBag.Cinemas = _cinema.Get();
             return View(movie);
         }
+        [HttpGet]
         public IActionResult Edit(int id)
         {
-            return View();
+            var movie = _movie.GetOne(filter: e => e.Id == id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.Categories = _category.Get();
+            ViewBag.Cinemas = _cinema.Get();
+            return View(movie);
         }
+
+        [HttpPost]
+        public IActionResult Edit(Movie movie, IFormFile? file)
+        {
+            ModelState.Remove("Image");
+            ModelState.Remove("Category");
+            ModelState.Remove("Cinema");
+            ModelState.Remove("ActorMovies");
+            ModelState.Remove("Name");
+
+            if (ModelState.IsValid)
+            { 
+                var existingMovie = _movie.GetOne(filter: e => e.Id == movie.Id);
+                if (existingMovie == null)
+                {
+                    return NotFound();
+                }
+
+                existingMovie.Name = movie.Name;
+                existingMovie.Description = movie.Description;
+                existingMovie.Price = movie.Price;
+                existingMovie.StartDate = movie.StartDate;
+                existingMovie.EndDate = movie.EndDate;
+                existingMovie.CategoryId = movie.CategoryId;
+                existingMovie.CinemaId = movie.CinemaId;
+
+                if (file != null && file.Length > 0)
+                {
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\movies", fileName);
+
+                    using (var stream = System.IO.File.Create(filePath))
+                    {
+                        file.CopyTo(stream);
+                    }
+
+                    if (!string.IsNullOrEmpty(existingMovie.Image))
+                    {
+                        var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\movies", existingMovie.Image);
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
+
+                    existingMovie.Image = fileName;
+                }
+
+                _movie.Alter(existingMovie);
+                _movie.Commit();
+
+                TempData["message"] = "Movie updated successfully.";
+                return RedirectToAction("IndexAdmin");
+            }
+
+            ViewBag.Categories = _category.Get();
+            ViewBag.Cinemas = _cinema.Get();
+            return View(movie);
+        }
+
+
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            var movie = _movie.GetOne(filter: e => e.Id == id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            return View(movie);
+        }
+
+        [HttpPost]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var movie = _movie.GetOne(filter: e => e.Id == id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            _movie.Delete(movie);
+            _movie.Commit();
+            TempData["message"] = "Movie deleted successfully.";
+            return RedirectToAction("IndexAdmin");
+        }
+
 
     }
 }

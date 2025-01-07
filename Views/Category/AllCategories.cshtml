@@ -1,25 +1,39 @@
 ﻿@model ICollection<Category>
 @{
-    ViewData["Title"] = "AllCategories";
+    ViewData["Title"] = "All Categories";
 }
 
-<h1>All Categories</h1>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">All Categories</h1>
 
-<table class="table table-success table-striped">
-    <thead>
-        <tr>
-            <th scope="col">Category Name</th>
-            <th scope="col">All Movies</th>
-
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-        <tr>
-            <th scope="row">@item.Name</th>
-            <td><a href="/Category/Index/@item.Id">All Movies</a></td>
-        </tr>
-        }
-    </tbody>
-</table>
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">Category Name</th>
+                <th scope="col" class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td class="text-center">
+                            <a href="/Category/Index/@item.Id" class="btn btn-primary btn-sm">
+                                <i class="bi bi-film"></i> View Movies
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="2" class="text-center text-muted">No categories found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

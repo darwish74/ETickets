@@ -19,5 +19,6 @@
 	</ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\Images\Logo\" />
+    <Folder Include="wwwroot\Images\Profile\" />
   </ItemGroup>
 </Project>

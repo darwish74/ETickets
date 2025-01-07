@@ -1,0 +1,88 @@
+﻿@model ETickets.Models.Movie
+
+@{
+    ViewData["Title"] = "Edit Movie";
+}
+
+<h1>Edit Movie</h1>
+
+<form asp-action="Edit" asp-controller="Home" enctype="multipart/form-data" method="post">
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Price" class="form-label"></label>
+        @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="StartDate" class="form-label"></label>
+        @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="EndDate" class="form-label"></label>
+        @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="mb-3">
+        <label for="Category" class="form-label">Category</label>
+        <select asp-for="CategoryId" asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name"))" class="form-control"></select>
+    </div>
+
+    <div class="mb-3">
+        <label for="Cinema" class="form-label">Cinema</label>
+        <select asp-for="CinemaId" asp-items="@(new SelectList(ViewBag.Cinemas, "Id", "Name"))" class="form-control"></select>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Image" class="form-label"></label>
+        <input asp-for="Image" class="form-control" value="@Model.Image" type="file" name="file" accept="image/*" onchange="previewImage(event)" />
+        <span asp-validation-for="Image" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <img id="imagePreview"
+             src="@(string.IsNullOrEmpty(Model.Image) ? "" : Url.Content("~/images/movies/" + Model.Image))"
+             alt="Image Preview"
+             style="max-width: 20%; height: auto; @(string.IsNullOrEmpty(Model.Image) ? "display: none;" : "display: block;")" />
+    </div>
+    @Html.HiddenFor(model => model.Image)
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="IndexAdmin" class="btn btn-secondary">Cancel</a>
+</form>
+@section scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        function previewImage(event) {
+            const input = event.target;
+            const imagePreview = document.getElementById("imagePreview");
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = "block";
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+    </script>
+}
+
